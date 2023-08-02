@@ -6,7 +6,6 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
-      <h1>뉴스 검색</h1>
       <Search />
       <List />
     </>

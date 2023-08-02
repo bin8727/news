@@ -1,21 +1,39 @@
 import { useForm } from "react-hook-form";
-import { useAppDispatch } from "../../hook/hook";
-import { FetchParams } from "../../api/newsAPI";
+import { useEffect } from "react";
+
+import { Container, Label } from "./style";
 import { fetchAllNews } from "../../slices/newsSlice";
-import { styled } from "styled-components";
+import { FetchParams } from "../../api/newsAPI";
+import { useAppDispatch } from "../../hook/hook";
 
 type FormData = {
   searchTerm: string;
   enteredFromDate: string;
   enteredToDate: string;
-}
+};
+
+const getCurrentDate = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+};
 
 const Search: React.FC = () => {
   const {
     register,
     handleSubmit,
-    reset
-  } = useForm<FormData>();
+    reset,
+    setValue
+  } = useForm<FormData>({
+    defaultValues: {
+      searchTerm: 'Apple',
+      enteredFromDate: '',
+      enteredToDate: getCurrentDate()
+    }
+  });
   const dispatch = useAppDispatch();
 
   const onSubmitHandler = (data: FormData) => {
@@ -29,10 +47,15 @@ const Search: React.FC = () => {
 
     reset();
   };
+
+  useEffect(() => {
+    setValue('enteredToDate', getCurrentDate());
+  }, [setValue]);
+
   return (
-    <FormContainer onSubmit={handleSubmit(onSubmitHandler)}>
+    <Container onSubmit={handleSubmit(onSubmitHandler)}>
       <div>
-        <Label htmlFor="searchTerm">검색어:</Label>
+        <Label htmlFor="searchTerm">검색어</Label>
         <input 
           type="text"
           id="searchTerm"
@@ -41,7 +64,7 @@ const Search: React.FC = () => {
       </div>
 
       <div>
-        <Label htmlFor="enteredFromDate">날짜:</Label>
+        <Label htmlFor="enteredFromDate">날짜</Label>
         <input 
           type="date"
           id="enteredFromDate"
@@ -52,7 +75,7 @@ const Search: React.FC = () => {
       </div>
 
       <div>
-        <Label htmlFor="enteredToDate">날짜:</Label>
+        <Label htmlFor="enteredToDate">날짜</Label>
         <input 
           type="date"
           id="enteredToDate"
@@ -63,14 +86,8 @@ const Search: React.FC = () => {
       </div>
 
       <button type="submit">검색</button>
-    </FormContainer>
+    </Container>
   );
 };
 
 export default Search;
-
-const FormContainer = styled.form`
-  
-`;
-
-const Label = styled.label``;
