@@ -20,6 +20,7 @@ const List = () => {
             <h3>{news.title}</h3>
             <p>{news.content}</p>
             <a href={news.url}>자세히 보기</a>
+            <img src={news.urlToImage} alt='' />
           </li>
         ))}
       </ul>
